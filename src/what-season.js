@@ -5,7 +5,7 @@ module.exports = function getSeason(date) {
   if (!date) {
     return 'Unable to determine the time of year!'
   }
-  else if (!(date instanceof Date)) {
+  else if (Object.prototype.toString.call(date) !== '[object Date]') {
     throw Error;
   }
   let m = date.getMonth(),
