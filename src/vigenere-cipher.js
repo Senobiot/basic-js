@@ -10,52 +10,50 @@ class VigenereCipheringMachine {
  	}
   }
 
-
   encrypt(enc, cipher) {
 
-  	  	if (!enc || !cipher) throw Error("Invalid argument");
+	if (!enc || !cipher) throw Error("Invalid argument"); // валидация аргумента
+
     let table = "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
         str = enc.toUpperCase(),
         code = cipher.toUpperCase(),
         j = 0,
         result = "";
 
-     let ind = (phrase, index) => table.indexOf(phrase[index]);
+	let ind = (phrase, index) => table.indexOf(phrase[index]); // вынес для читаемости
 
 
     for (let i = 0; i < str.length; i++) {
       if (ind(str, i) >= 0) {
-        if (ind(code, j) + ind(str, i) >= 26) {
-          result += table[ind(code, j) + ind(str, i) - 26]
-        } else {result += table[ind(code, j) + ind(str, i)]}
-
-			j >= code.length - 1 ? j = 0 : j++;
-      }
-      else {result += str[i]}
+			(ind(code, j) + ind(str, i) >= 26) ?
+				result += table[ind(code, j) + ind(str, i) - 26] :
+				result += table[ind(code, j) + ind(str, i)];
+				j >= code.length - 1 ? j = 0 : j++; // тут если кодовое слово кончилось, обнуляем индекс
+      } else 	{result += str[i]};
     } 
-return this.type === 'reverse'? result.split('').reverse().join(''): result;
 
+	return this.type === 'reverse'? result.split('').reverse().join(''): result;
   }    
+
   decrypt(enc, cipher) {
 
-  	  		if (!enc || !cipher) throw Error("Invalid argument");
+	if (!enc || !cipher) throw Error("Invalid argument");
+
     let table = "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
         str = enc.toUpperCase(),
         code = cipher.toUpperCase(),
         j = 0,
         result = "";
+
+	let ind = (phrase, index) => table.indexOf(phrase[index]); // вынес для читаемости
     
     for (let i = 0; i < str.length; i++) {
       if (table.indexOf(str[i]) >= 0) {
-        if ((table.indexOf(str[i]) - table.indexOf(code[j])) >= 0) {
-          result += table[table.indexOf(str[i]) - table.indexOf(code[j])]
-        } else {result += table[table.indexOf(str[i])  - table.indexOf(code[j]) + 26]
-               }
-
-        if (j >= code.length - 1) {j = 0}
-        else {j++}   
-      }
-      else {result += str[i]}
+        (ind(str, i) - ind(code, j)) >= 0 ? 
+			result += table[ind(str, i) - ind(code, j)] :
+        	result += table[ind(str, i)  - ind(code, j) + 26];
+       		j >= code.length - 1 ? j = 0: j++;
+      } else {result += str[i]};
     } 
 
 	return this.type === 'reverse'? result.split('').reverse().join(''): result;
